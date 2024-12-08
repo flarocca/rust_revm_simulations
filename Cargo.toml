@@ -1,0 +1,17 @@
+[package]
+name = "rust_revm_simulations"
+version = "0.1.0"
+edition = "2021"
+
+[dependencies]
+# Alloy dependencies
+alloy-provider = { version = "0.5.4", features = [ "reqwest" ] }
+alloy-eips = "0.5.4"
+alloy-transport-http = "0.5.4"
+alloy-sol-types = { version = "0.8.14", features = [ "std" ] }
+alloy-contract = "0.5.4"
+
+revm = { version = "18.0.0", features = [ "alloydb", "std" ]}
+tokio = { version = "1.42.0", features = [ "rt-multi-thread", "macros" ] }
+reqwest = "0.12.9"
+anyhow = "1.0.93"
