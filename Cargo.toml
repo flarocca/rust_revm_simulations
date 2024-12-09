@@ -10,6 +10,7 @@ alloy-eips = "0.5.4"
 alloy-transport-http = "0.5.4"
 alloy-sol-types = { version = "0.8.14", features = [ "std" ] }
 alloy-contract = "0.5.4"
+alloy-rpc-types = "0.5.4"
 
 revm = { version = "18.0.0", features = [ "alloydb", "std" ]}
 tokio = { version = "1.42.0", features = [ "rt-multi-thread", "macros" ] }

@@ -1,8 +1,11 @@
 use alloy_sol_types::decode_revert_reason;
 use anyhow::{anyhow, Result};
 use revm::primitives::{
-    AccessList, AccessListItem, Bytes, ExecutionResult, Output, ResultAndState, B256,
+    AccessList, AccessListItem, Address, Bytes, ExecutionResult, Log, Output, ResultAndState, B256,
+    U256,
 };
+
+use crate::AlloyCacheDB;
 
 pub fn get_revert_message(revert_message: &Bytes) -> String {
     match decode_revert_reason(revert_message) {
@@ -11,14 +14,17 @@ pub fn get_revert_message(revert_message: &Bytes) -> String {
     }
 }
 
-pub fn extract_gas_and_output(result: &ExecutionResult) -> Result<(Bytes, u64, u64)> {
+pub fn extract_gas_output_and_logs(
+    result: &ExecutionResult,
+) -> Result<(Bytes, Vec<Log>, u64, u64)> {
     match result {
         ExecutionResult::Success {
             output: Output::Call(value),
             gas_used,
             gas_refunded,
+            logs,
             ..
-        } => Ok((value.clone(), *gas_used, *gas_refunded)),
+        } => Ok((value.clone(), logs.clone(), *gas_used, *gas_refunded)),
         ExecutionResult::Revert { output, .. } => {
             Err(anyhow!("Reverted: {:?}", get_revert_message(output)))
         }
@@ -42,4 +48,9 @@ pub fn extract_access_list(result: &ResultAndState) -> AccessList {
         .collect::<Vec<_>>();
 
     AccessList::from(storages)
+}
+
+pub fn set_eth_balance(account: Address, amount: U256, database: &mut AlloyCacheDB) {
+    let account = database.load_account(account).unwrap();
+    account.info.balance = amount;
 }
