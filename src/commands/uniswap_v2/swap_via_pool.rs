@@ -66,7 +66,7 @@ pub async fn execute(rpc_url: &str, args: &ArgMatches) {
     let swap_configuration = SwapViaPoolConfig::from_args(caller, args);
 
     // Step 1: Based on the discovery made with the router, we know simulate the swap hitting
-    // the poool straiught away.
+    // the poool straight away.
     let result =
         simulate(&block, &client, &swap_configuration).expect("Error running simulation for pool");
 

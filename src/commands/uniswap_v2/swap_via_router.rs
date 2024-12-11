@@ -154,7 +154,7 @@ fn simulate_with_pool(
 
     // For the purposes of this example we are only moving forward when there is a single swap.
     // However, there can be cases where the router performed multiple swaps to get the output.
-    // This can happen when there is no a direct path between two pairs for example.
+    // This can happen when there is no direct path between two pairs for example.
     if swap_logs.len() != 1 {
         return Err(anyhow!("Only one swap is supported"));
     }
