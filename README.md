@@ -15,6 +15,17 @@ The disadvantage of using the Router is that it is more expensive in terms of ga
 Leveraging `revm`, we can simulate the swap using the router and discover the underlaying pool used and the corresponding amounts.
 Once we discovered the pool and the inputs, we can simply execute the swap via the pool directly, saving gas.
 
+The reduction in gas is almost 25%  in average when swapping via the pool directly. This is because on the one hand we need an additional approve operation and also all the
+computations needed to find the pool and the amounts that the Router does.
+
+- Swap via router: ~167.000 gas units
+ - Approve: ~46.000 gas units
+ - Swap: ~121.000 gas units
+
+- Swap via pool: ~132.500 gas units
+ - Transfer: ~30.000 gas units
+ - Swap: ~102.500 gas units
+
 ## Discovering the pool
 
 When a swap is performed, pools emit Swap events. We can extract the emitted events from the transaction, filter out the Swap events and extract the pool address
