@@ -16,3 +16,4 @@ revm = { version = "18.0.0", features = [ "alloydb", "std" ]}
 tokio = { version = "1.42.0", features = [ "rt-multi-thread", "macros" ] }
 reqwest = "0.12.9"
 anyhow = "1.0.93"
+clap = { version = "4.5.23", features = ["derive", "env"] }

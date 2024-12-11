@@ -1,13 +1,13 @@
-use crate::{
-    helpers::{extract_access_list, extract_gas_output_and_logs},
-    AlloyCacheDB,
-};
 use alloy_sol_types::{sol, SolCall, SolValue};
 use anyhow::{anyhow, Result};
 use revm::{
     primitives::{keccak256, AccessList, Address, Bytes, TxKind, U256},
     Evm,
 };
+
+use crate::commons::helpers::{extract_access_list, extract_gas_output_and_logs};
+
+use super::helpers::AlloyCacheDB;
 
 sol! {
     #[allow(missing_docs)]
@@ -72,19 +72,9 @@ impl Erc20 {
             .build();
 
         let result = evm.transact()?;
-        let (output, _, gas_used, gas_refunded) = extract_gas_output_and_logs(&result.result)?;
+        let (output, _, _, _) = extract_gas_output_and_logs(&result.result)?;
         let access_list = extract_access_list(&result);
         let output = <U256>::abi_decode(&output, false)?;
-
-        println!(
-            "ERC20 Balance Of - Gas used with no access list: {:?}",
-            gas_used
-        );
-        println!(
-            "ERC20 Balance Of - Gas refunded with no access list: {:?}",
-            gas_refunded
-        );
-        println!("ERC20 Balance Of - Output: {:?}", output);
 
         Ok((output, access_list))
     }
@@ -108,19 +98,9 @@ impl Erc20 {
             .build();
 
         let result = evm.transact()?;
-        let (output, _, gas_used, gas_refunded) = extract_gas_output_and_logs(&result.result)?;
+        let (output, _, _, _) = extract_gas_output_and_logs(&result.result)?;
         let output = <U256>::abi_decode(&output, false)?;
         let access_list = extract_access_list(&result);
-
-        println!(
-            "ERC20 Allowance - Gas used with no access list: {:?}",
-            gas_used
-        );
-        println!(
-            "ERC20 Allowance - Gas refunded with no access list: {:?}",
-            gas_refunded
-        );
-        println!("ERC20 Allowance - Output: {:?}", output);
 
         Ok((output, access_list))
     }

@@ -1,11 +1,16 @@
+use alloy_provider::{network::Ethereum, RootProvider};
 use alloy_sol_types::decode_revert_reason;
+use alloy_transport_http::Http;
 use anyhow::{anyhow, Result};
+use reqwest::Client;
+use revm::db::{AlloyDB, CacheDB};
 use revm::primitives::{
     AccessList, AccessListItem, Address, Bytes, ExecutionResult, Log, Output, ResultAndState, B256,
     U256,
 };
 
-use crate::AlloyCacheDB;
+pub type AlloyCacheDB<'a> =
+    CacheDB<AlloyDB<Http<Client>, Ethereum, &'a RootProvider<Http<Client>>>>;
 
 pub fn get_revert_message(revert_message: &Bytes) -> String {
     match decode_revert_reason(revert_message) {
