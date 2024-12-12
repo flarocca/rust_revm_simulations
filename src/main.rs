@@ -1,6 +1,6 @@
 use clap::{Arg, ArgAction, Command};
 use commands::{
-    eth_subscriptions::subscribe_new_block_headers,
+    eth_subscriptions::{subscribe_new_block_headers, subscribe_new_pending_transactions},
     uniswap_v2::{swap_via_pool, swap_via_router},
 };
 
@@ -106,6 +106,23 @@ async fn main() {
                         ),
                 ),
         )
+        .subcommand(
+            Command::new("subscribe-new-pending-transactions")
+                .about("Subscribe to new pending transactions")
+                .long_flag("subscribe-new-pending-transactions")
+                .arg(
+                    Arg::new("ws-url")
+                        .long("ws-url")
+                        .required(true)
+                        .action(ArgAction::Set)
+                        .help("The WS URL to subscribe to")
+                        // This is a free Alchemy API key, it is strongly recommended to create your own
+                        // to avoid being thtrottled.
+                        .default_value(
+                            "wss://eth-mainnet.g.alchemy.com/v2/Sg0Hh6Bcv4Dfj2OcU4_6VePVPED-8-MD",
+                        ),
+                ),
+        )
         .get_matches();
 
     match matches.subcommand() {
@@ -113,6 +130,9 @@ async fn main() {
         Some(("swap-via-pool", submatches)) => swap_via_pool::execute(submatches).await,
         Some(("subscribe-new-block-headers", submatches)) => {
             subscribe_new_block_headers::execute(submatches).await
+        }
+        Some(("subscribe-new-pending-transactions", submatches)) => {
+            subscribe_new_pending_transactions::execute(submatches).await
         }
         _ => {
             println!("No subcommand provided");

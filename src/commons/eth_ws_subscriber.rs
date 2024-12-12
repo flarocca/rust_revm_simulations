@@ -32,6 +32,15 @@ impl EthWsSubscriptionRequest {
             params: vec!["newHeads".to_string()],
         }
     }
+
+    pub fn new_pending_transactions(id: u32) -> Self {
+        Self {
+            jsonrpc: "2.0".to_string(),
+            id,
+            method: "eth_subscribe".to_string(),
+            params: vec!["newPendingTransactions".to_string()],
+        }
+    }
 }
 
 pub async fn subscribe<T>(
