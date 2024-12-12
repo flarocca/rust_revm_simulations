@@ -1,9 +1,7 @@
-use alloy_eips::{BlockId, BlockNumberOrTag};
+use alloy_eips::BlockNumberOrTag;
 use alloy_provider::Provider;
-use alloy_provider::{ProviderBuilder, RootProvider};
-use alloy_rpc_types::Block;
+use alloy_provider::ProviderBuilder;
 use alloy_rpc_types::Transaction;
-use alloy_transport_http::Http;
 use anyhow::Result;
 use clap::ArgMatches;
 use futures::StreamExt;
