@@ -48,7 +48,10 @@ impl SwapViaPoolConfig {
     }
 }
 
-pub async fn execute(rpc_url: &str, args: &ArgMatches) {
+pub async fn execute(args: &ArgMatches) {
+    let rpc_url = args
+        .get_one::<String>("rpc-url")
+        .expect("RPC URL is required");
     let rpc_url = rpc_url.parse().unwrap();
 
     let client = ProviderBuilder::new().on_http(rpc_url);
