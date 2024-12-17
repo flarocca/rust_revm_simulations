@@ -400,6 +400,22 @@ dependencies = [
 ]
 
 [[package]]
+name = "alloy-signer-local"
+version = "0.5.4"
+source = "registry+https://github.com/rust-lang/crates.io-index"
+checksum = "6614f02fc1d5b079b2a4a5320018317b506fd0a6d67c1fd5542a71201724986c"
+dependencies = [
+ "alloy-consensus",
+ "alloy-network",
+ "alloy-primitives",
+ "alloy-signer",
+ "async-trait",
+ "k256",
+ "rand",
+ "thiserror",
+]
+
+[[package]]
 name = "alloy-sol-macro"
 version = "0.8.14"
 source = "registry+https://github.com/rust-lang/crates.io-index"
@@ -2657,9 +2673,12 @@ dependencies = [
  "alloy-eips",
  "alloy-provider",
  "alloy-rpc-types",
+ "alloy-signer",
+ "alloy-signer-local",
  "alloy-sol-types",
  "alloy-transport-http",
  "anyhow",
+ "async-trait",
  "clap",
  "futures",
  "reqwest",
