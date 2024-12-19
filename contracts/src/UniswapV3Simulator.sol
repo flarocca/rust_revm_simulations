@@ -9,8 +9,26 @@ contract UniswapV3Simulator {
     uint160 internal constant MIN_SQRT_RATIO = 4295128739;
     uint160 internal constant MAX_SQRT_RATIO = 1461446703485210103287273052203988822378723970342;
 
+    function getPoolData(address pool)
+        external
+        view
+        returns (
+            address token00,
+            address token01,
+            address factory,
+            uint24 fee
+        )
+    {
+        
+        token00 = IUniswapV3Pool(pool).token0();
+        token01 = IUniswapV3Pool(pool).token1();
+        factory = IUniswapV3Pool(pool).factory();
+        fee = IUniswapV3Pool(pool).fee();
+    }
+
     function swap(
         address poolAddress,
+        address recipient,
         address tokenIn,
         address tokenOut,
         bool zeroForOne,
@@ -29,7 +47,7 @@ contract UniswapV3Simulator {
 
         // We ignore the return values to rely on the real balances anfter swapping.
         // This is because some tokens may have a fee on transfer, which will affect the balances.
-        internal_swap(address(this), poolAddress, tokenIn, zeroForOne, int256(amountIn));
+        internal_swap(recipient, poolAddress, tokenIn, zeroForOne, int256(amountIn));
 
         tokenInBalanceAfter = IERC20(tokenIn).balanceOf(address(this));
         tokenOutBalanceAfter = IERC20(tokenOut).balanceOf(address(this));

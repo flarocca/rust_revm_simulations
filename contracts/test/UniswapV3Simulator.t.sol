@@ -15,7 +15,12 @@ contract UniswapV3SimulatorTest is Test {
     
     function setUp() public { }
 
-    function test_simple_swap() public {
+    function testGetBytecode() public {
+        UniswapV3Simulator simulator = new UniswapV3Simulator();
+        console.logBytes(address(simulator).code);
+    }
+
+    function testSimpleSwap() public {
         bool zeroForOne = true; // `true` indicates that we want to swap token0 for token1.
         uint256 amountIn = 1 ether; // Positive indicates we are swapping exact input, negative indicates exact output.
 
