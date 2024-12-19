@@ -38,10 +38,10 @@ pub struct Swap {
 
 #[derive(Debug, Clone)]
 pub struct PoolData {
-    pub factory: Address,
+    pub _factory: Address,
     pub token_0: Address,
     pub token_1: Address,
-    pub fee: u128,
+    pub _fee: u128,
 }
 
 impl Pool {
@@ -53,7 +53,7 @@ impl Pool {
         }
     }
 
-    pub fn decode_swaps(logs: &[Log]) -> Result<Vec<Swap>> {
+    pub fn _decode_swaps(logs: &[Log]) -> Result<Vec<Swap>> {
         let mut swaps = vec![];
 
         for log in logs.iter() {
@@ -80,7 +80,7 @@ impl Pool {
         amount_in: U256,
         to: Address,
         database: &mut AlloyCacheDB,
-    ) -> Result<AccessList> {
+    ) -> Result<(IPool::swapReturn, AccessList)> {
         let calldata = Bytes::from(
             IPool::swapCall::new((self.pool, to, token_in, token_out, zero_for_one, amount_in))
                 .abi_encode(),
@@ -129,7 +129,9 @@ impl Pool {
         );
         println!("Pool Swap - Output: {:?}", output);
 
-        Ok(access_list)
+        let result = IPool::swapCall::abi_decode_returns(&output, true)?;
+
+        Ok((result, access_list))
     }
 
     pub fn get_pool_data(&self, database: &mut AlloyCacheDB) -> Result<PoolData> {
@@ -146,14 +148,14 @@ impl Pool {
 
         let result = evm.transact()?;
         let (output, _, _, _) = extract_gas_output_and_logs(&result.result)?;
-        let (token_0, token_1, factory, fee) =
+        let (token_0, token_1, _factory, _fee) =
             <(Address, Address, Address, u128)>::abi_decode(&output, true)?;
 
         Ok(PoolData {
-            factory,
             token_0,
             token_1,
-            fee,
+            _factory,
+            _fee,
         })
     }
 }

@@ -30,20 +30,18 @@ contract UniswapV3SimulatorTest is Test {
 
         deal(address(WETH), address(simulator), 10 ether);
 
-        uint256 tokenInBeforeTest = WETH.balanceOf(address(simulator));
-        uint256 tokenOutBeforeTest = USDT.balanceOf(address(simulator));
+        uint256 tokenInBeforeTest = WETH.balanceOf(address(this));
+        uint256 tokenOutBeforeTest = USDT.balanceOf(address(this));
 
         (uint256 tokenInBalanceBefore, uint256 tokenInBalanceAfter, uint256 tokenOutBalanceBefore, uint256 tokenOutBalanceAfter) = 
-            simulator.swap(POOL, address(WETH), address(USDT), zeroForOne, amountIn);
+            simulator.swap(POOL, address(this), address(WETH), address(USDT), zeroForOne, amountIn);
 
-        uint256 tokenInAfterTest = WETH.balanceOf(address(simulator));
-        uint256 tokenOutAfterTest = USDT.balanceOf(address(simulator));
+        uint256 tokenInAfterTest = WETH.balanceOf(address(this));
+        uint256 tokenOutAfterTest = USDT.balanceOf(address(this));
 
         assertEq(tokenInBalanceBefore, tokenInBeforeTest);
         assertEq(tokenOutBalanceBefore, tokenOutBeforeTest);
         assertEq(tokenInBalanceAfter, tokenInAfterTest);
         assertEq(tokenOutBalanceAfter, tokenOutAfterTest);
-
-        assertEq(tokenInBalanceAfter, tokenInBalanceBefore - amountIn);
     }
 }

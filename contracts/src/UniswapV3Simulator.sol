@@ -42,15 +42,15 @@ contract UniswapV3Simulator {
             uint256 tokenOutBalanceAfter
         )
     {
-        tokenInBalanceBefore = IERC20(tokenIn).balanceOf(address(this));
-        tokenOutBalanceBefore = IERC20(tokenOut).balanceOf(address(this));
+        tokenInBalanceBefore = IERC20(tokenIn).balanceOf(recipient);
+        tokenOutBalanceBefore = IERC20(tokenOut).balanceOf(recipient);
 
         // We ignore the return values to rely on the real balances anfter swapping.
         // This is because some tokens may have a fee on transfer, which will affect the balances.
         internal_swap(recipient, poolAddress, tokenIn, zeroForOne, int256(amountIn));
 
-        tokenInBalanceAfter = IERC20(tokenIn).balanceOf(address(this));
-        tokenOutBalanceAfter = IERC20(tokenOut).balanceOf(address(this));
+        tokenInBalanceAfter = IERC20(tokenIn).balanceOf(recipient);
+        tokenOutBalanceAfter = IERC20(tokenOut).balanceOf(recipient);
     }
 
     function uniswapV3SwapCallback(int256 amount0Out, int256 amount1Out, bytes calldata data) external {
