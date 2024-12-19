@@ -6,11 +6,16 @@ use eth_subscriptions::{
 };
 use general::compute_address::ComputeAddress;
 use std::collections::HashMap;
-use uniswap_v2::{swap_via_pool::SwapViaPool, swap_via_router::SwapViaRouter};
+use uniswap_v2::{
+    swap_via_pool::SwapViaPool as UniswapV2SwapViaPool,
+    swap_via_router::SwapViaRouter as UniswapV2SwapViaRouter,
+};
+use uniswap_v3::swap_via_pool::SwapViaPool as UniswapV3SwapViaPool;
 
 pub mod eth_subscriptions;
 pub mod general;
 pub mod uniswap_v2;
+pub mod uniswap_v3;
 
 #[async_trait]
 pub trait Command {
@@ -28,8 +33,9 @@ pub fn get_commands() -> HashMap<String, Box<dyn Command>> {
         Box::new(SubscribeNewBlockHeaders),
         Box::new(SubscribeNewPendingTransactions),
         Box::new(ComputeAddress),
-        Box::new(SwapViaRouter),
-        Box::new(SwapViaPool),
+        Box::new(UniswapV2SwapViaRouter),
+        Box::new(UniswapV2SwapViaPool),
+        Box::new(UniswapV3SwapViaPool),
     ];
 
     for command in commands {

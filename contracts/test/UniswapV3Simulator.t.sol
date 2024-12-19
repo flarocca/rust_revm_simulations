@@ -15,7 +15,12 @@ contract UniswapV3SimulatorTest is Test {
     
     function setUp() public { }
 
-    function test_simple_swap() public {
+    function testGetBytecode() public {
+        UniswapV3Simulator simulator = new UniswapV3Simulator();
+        console.logBytes(address(simulator).code);
+    }
+
+    function testSimpleSwap() public {
         bool zeroForOne = true; // `true` indicates that we want to swap token0 for token1.
         uint256 amountIn = 1 ether; // Positive indicates we are swapping exact input, negative indicates exact output.
 
@@ -25,20 +30,18 @@ contract UniswapV3SimulatorTest is Test {
 
         deal(address(WETH), address(simulator), 10 ether);
 
-        uint256 tokenInBeforeTest = WETH.balanceOf(address(simulator));
-        uint256 tokenOutBeforeTest = USDT.balanceOf(address(simulator));
+        uint256 tokenInBeforeTest = WETH.balanceOf(address(this));
+        uint256 tokenOutBeforeTest = USDT.balanceOf(address(this));
 
         (uint256 tokenInBalanceBefore, uint256 tokenInBalanceAfter, uint256 tokenOutBalanceBefore, uint256 tokenOutBalanceAfter) = 
-            simulator.swap(POOL, address(WETH), address(USDT), zeroForOne, amountIn);
+            simulator.swap(POOL, address(this), address(WETH), address(USDT), zeroForOne, amountIn);
 
-        uint256 tokenInAfterTest = WETH.balanceOf(address(simulator));
-        uint256 tokenOutAfterTest = USDT.balanceOf(address(simulator));
+        uint256 tokenInAfterTest = WETH.balanceOf(address(this));
+        uint256 tokenOutAfterTest = USDT.balanceOf(address(this));
 
         assertEq(tokenInBalanceBefore, tokenInBeforeTest);
         assertEq(tokenOutBalanceBefore, tokenOutBeforeTest);
         assertEq(tokenInBalanceAfter, tokenInAfterTest);
         assertEq(tokenOutBalanceAfter, tokenOutAfterTest);
-
-        assertEq(tokenInBalanceAfter, tokenInBalanceBefore - amountIn);
     }
 }
